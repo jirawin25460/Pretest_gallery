@@ -1,69 +1,79 @@
-# Pretest_gallery
+# Pretest Gallery
 
-ข้อที่ 6
-System Architecture Overview
-โปรเจกต์นี้ออกแบบภายใต้โครงสร้าง 3-Tier Architecture เพื่อแยกส่วนการทำงานให้ชัดเจนและรองรับการขยายตัวในอนาคต:
+ระบบแกลเลอรีสำหรับแสดงรูปภาพพร้อม **Hashtags Filtering** และ **Infinite Scroll**  
+ออกแบบด้วยสถาปัตยกรรมแบบ **3-Tier Architecture** เพื่อแยกหน้าที่ของระบบอย่างชัดเจน และรองรับการขยายในอนาคต
 
-Frontend (Presentation Layer)
+---
 
-Technology: React (Single-Page Application)
+# System Architecture Overview
 
-Responsibility: จัดการ UI/UX, การทำ Infinite Scroll, และการกรองรูปภาพ (Filtering) ตาม Hashtags
+โปรเจกต์นี้ใช้โครงสร้าง **3-Tier Architecture**
 
-Hosting: Deploy บน Render Static Site พร้อมระบบ CDN เพื่อความรวดเร็วในการเข้าถึงข้อมูล
+---
 
-Backend (Logic Layer)
+# Frontend (Presentation Layer)
 
-Technology: Java 21 / Spring Boot 3.x
+**Technology**
+- React (Single Page Application)
 
-Responsibility: ให้บริการ RESTful API เพื่อเชื่อมต่อกับฐานข้อมูล, จัดการ Business Logic เช่นการค้นหาแบบ Partial Match และการแบ่งหน้าข้อมูล (Pagination)
+**Responsibilities**
+- จัดการ **UI / UX**
+- รองรับ **Infinite Scroll**
+- ระบบ **Hashtag Filtering**
 
-Runtime: รันในรูปแบบ Docker Container เพื่อให้มั่นใจเรื่อง Consistency ของสภาพแวดล้อมบน Production
+**Hosting**
+- Deploy บน **Render Static Site**
+- ใช้ **CDN** เพื่อเพิ่มความเร็วในการโหลดข้อมูล
 
-Database (Data Layer)
+---
 
-Technology: PostgreSQL 16
+# Backend (Logic Layer)
 
-Data Model: จัดเก็บข้อมูลแบบ Relational โดยใช้ความสัมพันธ์แบบ Many-to-Many ระหว่างตาราง images และ tags เพื่อรองรับ Hashtags ไม่จำกัดต่อหนึ่งรูปภาพ
+**Technology**
 
-Production Specifications
-Hosting Platform: Render (PaaS)
+- Java 21
+- Spring Boot 3.x
 
-Region: Oregon (US West)
+**Responsibilities**
 
-Infrastructure:
+- ให้บริการ **RESTful API**
+- จัดการ **Business Logic**
+- ค้นหาข้อมูลแบบ **Partial Match**
+- รองรับ **Pagination**
 
-Web Service (API): Managed Container Service
+**Runtime Environment**
 
-Static Site (Frontend): Automated Build & Deploy Pipeline
+- รันผ่าน **Docker Container**
+- เพื่อให้ Environment ของระบบ **เหมือนกันทุกที่ (Consistency)**
 
-Database: Managed PostgreSQL (High Availability)
+---
 
-Deployment Workflow (CI/CD)
-เราใช้ระบบ Automated Deployment ผ่าน GitHub เพื่อลดความผิดพลาดและเพิ่มความรวดเร็วในการอัปเดตระบบ:
+# Database (Data Layer)
 
-Version Control: เก็บซอร์สโค้ดแยก Repository (Frontend / Backend) บน GitHub
+**Technology**
 
-Continuous Deployment: เมื่อมีการ git push เข้าสู่ branch main:
+- PostgreSQL 16
 
-Frontend: รันคำสั่ง npm install && npm run build เพื่อ Generate ไฟล์ Production
+**Data Model**
 
-Backend: ทำการ Build Docker Image ใหม่จาก Dockerfile อัตโนมัติ
+- ใช้ความสัมพันธ์แบบ Many-to-Many ระหว่างตาราง images และ tags ผ่านตารางกลาง image_tags เพื่อรองรับการใส่ Hashtag ได้ไม่จำกัดต่อหนึ่งรูปภาพ
 
-Zero Downtime Deployment: ระบบจะทำการสลับ Traffic ไปยังเวอร์ชันใหม่เมื่อการ Build และ Health Check สำเร็จเท่านั้น
+- มีการใช้ Index ในคอลัมน์สำคัญเพื่อเพิ่มความเร็วในการค้นหาข้อมูล (Query Optimization)
 
-Infrastructure Diagram
-Plaintext
-[ User Browser ]
-       |
-       v (HTTPS)
-+-----------------------+      +-----------------------+
-|  Frontend (React)     | <--> | Backend (Spring Boot) |
-|  Render Static Site   |      | Render Docker Service |
-+-----------------------+      +-----------+-----------+
-                                           |
-                                           v
-                               +-----------------------+
-                               | Database (PostgreSQL) |
-                               | Render Managed DB     |
-                               +-----------------------+
+---
+
+# Production Specifications & Deployment
+
+**Hosting Platform: Render (PaaS) | Region: Oregon (US West)**
+
+- Infrastructure: ใช้บริการ Managed Services ทั้งหมด (Database, Web Service, Static Site) เพื่อความปลอดภัยและการสำรองข้อมูลอัตโนมัติ
+
+*CI/CD Workflow:*
+
+- Version Control: แยก Repository ของ Frontend และ Backend บน GitHub
+
+- Continuous Deployment: เมื่อมีการ git push เข้าสู่ branch main ระบบจะทำการ Auto-build และ Auto-deploy ทันที
+
+- Zero Downtime: ระบบจะตรวจสอบสถานะ (Health Check) ของเวอร์ชันใหม่ให้เรียบร้อยก่อนสลับ Traffic เพื่อไม่ให้ผู้ใช้งานได้รับผลกระทบระหว่างการอัปเดต
+
+
