@@ -11,7 +11,7 @@
 
 ---
 
-# Frontend (Presentation Layer)
+# Frontend 
 
 **Technology**
 - React (Single Page Application)
@@ -27,7 +27,7 @@
 
 ---
 
-# Backend (Logic Layer)
+# Backend 
 
 **Technology**
 
@@ -48,7 +48,7 @@
 
 ---
 
-# Database (Data Layer)
+# Database 
 
 **Technology**
 
@@ -75,5 +75,21 @@
 - Continuous Deployment: เมื่อมีการ git push เข้าสู่ branch main ระบบจะทำการ Auto-build และ Auto-deploy ทันที
 
 - Zero Downtime: ระบบจะตรวจสอบสถานะ (Health Check) ของเวอร์ชันใหม่ให้เรียบร้อยก่อนสลับ Traffic เพื่อไม่ให้ผู้ใช้งานได้รับผลกระทบระหว่างการอัปเดต
+  
+### Diagram
 
+```text
+[ User Browser ]
+       |
+       v (HTTPS)
++-----------------------+      +-----------------------+
+|   Frontend (React)    | <--> | Backend (Spring Boot) |
+|  Render Static Site   |      | Render Docker Service |
++-----------------------+      +-----------+-----------+
+                                           |
+                                           v
+                               +-----------------------+
+                               | Database (PostgreSQL) |
+                               |  Render Managed DB    |
+                               +-----------------------+
 
